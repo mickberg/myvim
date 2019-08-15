@@ -1,16 +1,46 @@
 echo "(╯°□°）╯︵ ┻━┻"
-
 let mapleader = ","
 let maplocalleader = "\\"
 
-set foldlevelstart=0
+" Plugins			---- {{{
 
+set nocompatible
+filetype off
+
+" set runtime path to vundle and init vundle
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" add plugins
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'pangloss/vim-javascript'
+Plugin 'mxw/vim-jsx'
+
+call vundle#end()
+" }}}
+
+" Basic rules			---- {{{
+
+"" visual
 syntax on
+set foldlevelstart=0
+colorscheme molokai
 set number
+set wrap
+
+"" misc
+set encoding=utf-8
+set wildmenu
+set laststatus=2
+set ruler
+set visualbell
+set showmatch
+
+"" Tab settings
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
-set laststatus=2
+" }}}
 
 " Vimscript file settings ------------- {{{
 augroup filetype_vim
@@ -33,8 +63,8 @@ augroup END
 " Markdown file settings		---- {{{
 augroup mkgroup
 	autocmd!
-	autocmd FileType markdown onoremap ih :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rkvg_"<cr> 
-	autocmd FileType markdown onoremap ah :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rg_vk0"<cr> 
+	autocmd FileType markdown onoremap ih :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rkvg_"<cr>
+	autocmd FileType markdown onoremap ah :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rg_vk0"<cr>
 augroup END
 " }}}
 
@@ -99,6 +129,20 @@ iabbrev map nnoremap
 iabbrev nmap nnoremap
 iabbrev imap inoremap
 
-iabbrev fmark "			---- {{{
-
 " }}}
+
+" Remove trailing whitespace			---- {{{
+function! <SID>remove_ws()
+	let l = line(".")
+	let c = col(".")
+	%s/\s\+$//e
+	call cursor(l, c)
+endfun
+
+augroup remove_ws
+	autocmd!
+	autocmd BufWritePre,BufRead * :call <SID>remove_ws()
+augroup END
+" }}}
+
+iabbrev fmark "			---- {{{
