@@ -1,6 +1,11 @@
+" File              : .vimrc
+" Author            : Mikael Berglund <mikael.berglund2@gmail.com>
+" Date              : 17.08.2019
+" Last Modified Date: 17.08.2019
+" Last Modified By  : Mikael Berglund <mikael.berglund2@gmail.com>
 echo "(╯°□°）╯︵ ┻━┻"
 let mapleader = ","
-let maplocalleader = "\\"
+let maplocalleader = " "
 
 " Plugins			---- {{{
 
@@ -15,9 +20,15 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
+Plugin 'alvan/vim-closetag'
+Plugin 'alpertuna/vim-header'
 
 call vundle#end()
 " }}}
+
+let g:header_field_author = 'Mikael Berglund'
+let g:header_field_author_email = 'mikael.berglund2@gmail.com'
+nnoremap <f1> :addHeader<cr>
 
 " Basic rules			---- {{{
 
@@ -40,6 +51,7 @@ set showmatch
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
+set smartindent
 " }}}
 
 " Vimscript file settings ------------- {{{
@@ -53,10 +65,15 @@ augroup END
 augroup statLine
 	autocmd!
 	autocmd FileType javascript nnoremap <buffer> <localleader>c I//<esc>
-	autocmd FileType python nnoremap <buffer> <localleader>c I#<esc>
 	autocmd FileType javascript set statusline=%.20F
 	autocmd FileType javascript set statusline+=%=
 	autocmd FileType javascript set statusline+=[%4c]\ \ [%l/%L]
+	" autofill curlybrackets
+	autocmd FileType javascript inoremap {<cr> {<cr>}<esc>O
+	autocmd FileType javascript inoremap [<cr> [<cr>]<esc>O
+	" move to next / prev brackets
+	nnoremap <localleader>bn /{<cr>:nohlsearch<cr>
+	nnoremap <localleader>bp ?{<cr>:nohlsearch<cr>
 augroup END
 " }}}
 
@@ -79,6 +96,8 @@ nnoremap <c-u> vawUe
 " vimrc quick edit
 nnoremap <leader>ev :split $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
+" gitignore quick edit
+nnoremap <leader>gi :split $HOME/.gitignore_global<cr>
 " enclose word in quatations
 nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
 nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
