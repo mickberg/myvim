@@ -1,7 +1,7 @@
 " File              : .vimrc
 " Author            : Mikael Berglund <mikael.berglund2@gmail.com>
 " Date              : 17.08.2019
-" Last Modified Date: 17.08.2019
+" Last Modified Date: 10.10.2019
 " Last Modified By  : Mikael Berglund <mikael.berglund2@gmail.com>
 echo "(╯°□°）╯︵ ┻━┻"
 let mapleader = ","
@@ -11,6 +11,9 @@ let maplocalleader = " "
 
 set nocompatible
 filetype off
+
+"set runtime path to jshint2
+set rtp+=~/.vim/bundle/jshint2.vim/
 
 " set runtime path to vundle and init vundle
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -24,6 +27,14 @@ Plugin 'alvan/vim-closetag'
 Plugin 'alpertuna/vim-header'
 
 call vundle#end()
+
+let g:closetag_filenames = '*.jsx,*.html,*.xhtml,*phtml'
+let g:closetag_xhtml_filenames = '*.jsx,*.xhtml'
+let g:closetag_filetypes = 'jsx,html,xhtml,phtml'
+let g:closetag_xhtml_filtypes = 'xhtml,jsx'
+let g:closetag_emptyTags_caseSensitive = 0
+let g:closetag_shortcut = '>'
+
 " }}}
 
 let g:header_field_author = 'Mikael Berglund'
@@ -36,6 +47,7 @@ nnoremap <f1> :addHeader<cr>
 syntax on
 set foldlevelstart=0
 colorscheme molokai
+set relativenumber
 set number
 set wrap
 
@@ -46,6 +58,7 @@ set laststatus=2
 set ruler
 set visualbell
 set showmatch
+set hlsearch
 
 "" Tab settings
 set tabstop=4
@@ -58,12 +71,18 @@ set smartindent
 augroup filetype_vim
 	autocmd!
 	autocmd FileType vim setlocal foldmethod=marker
+	autocmd FileType vim iabbrev ftjs FileType javascript
+	autocmd FileType vim iabbrev vmap vnoremap
+	autocmd FileType vim iabbrev map nnoremap
+	autocmd FileType vim iabbrev nmap nnoremap
+	autocmd FileType vim iabbrev imap inoremap
 augroup END
 " }}}
 
 " Javascript file settings ------------ {{{
 augroup statLine
 	autocmd!
+	autocmd FileType javascript setlocal foldmethod=marker
 	autocmd FileType javascript nnoremap <buffer> <localleader>c I//<esc>
 	autocmd FileType javascript set statusline=%.20F
 	autocmd FileType javascript set statusline+=%=
@@ -76,6 +95,11 @@ augroup statLine
 	nnoremap <localleader>bp ?{<cr>:nohlsearch<cr>
 augroup END
 " }}}
+
+augroup css
+	autocmd FileType scss inoremap [<cr> [<cr>]<esc>O
+	autocmd FileType scss inoremap {<cr> {<cr>}<esc>O
+augroup END
 
 " Markdown file settings		---- {{{
 augroup mkgroup
@@ -98,6 +122,8 @@ nnoremap <leader>ev :split $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 " gitignore quick edit
 nnoremap <leader>gi :split $HOME/.gitignore_global<cr>
+" bash alias quick edit
+nnoremap <leader>be :split $HOME/.bashrc<cr>
 " enclose word in quatations
 nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
 nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
@@ -141,12 +167,6 @@ iabbrev  @@ mikael.berglund2@gmail.com
 iabbrev ccopy Copyright 2019 Mikael Berglund, all rights reserved.
 iabbrev ssig -- <cr>Mikael Berglund<cr>mikael.berglund2@gmail.com
 iabbrev funtcion function
-
-iabbrev ftjs FileType javascript
-iabbrev vmap vnoremap
-iabbrev map nnoremap
-iabbrev nmap nnoremap
-iabbrev imap inoremap
 
 " }}}
 
