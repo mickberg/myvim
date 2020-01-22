@@ -1,19 +1,49 @@
-" File              : .vimrc
-" Author            : Mikael Berglund <mikael.berglund2@gmail.com>
-" Date              : 17.08.2019
-" Last Modified Date: 10.10.2019
-" Last Modified By  : Mikael Berglund <mikael.berglund2@gmail.com>
+" My vimrc setup
+" Also works as a reference sheet
+" mikael.berglund2@gmail.com
+
+" BASIC SETUP {{{
+
+" misc
 echo "(╯°□°）╯︵ ┻━┻"
 let mapleader = ","
 let maplocalleader = " "
-
-" Plugins			---- {{{
-
 set nocompatible
-filetype off
+set encoding=utf-8
+set laststatus=2
+filetype plugin on
 
-"set runtime path to jshint2
-set rtp+=~/.vim/bundle/jshint2.vim/
+" visual
+syntax enable
+colorscheme molokai
+set number
+set relativenumber
+set wrap
+set ruler
+set visualbell
+set showmatch
+set hlsearch
+
+" Tab settings
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set smartindent
+
+" folding
+set foldmethod=marker
+setlocal foldlevelstart=0
+
+" status line
+set statusline=%.20F
+
+set statusline=%.20F
+set statusline+=%=
+set statusline+=[%4c]\ \ [%l/%L]
+
+" }}}
+
+" PLUGINS {{{
 
 " set runtime path to vundle and init vundle
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -24,7 +54,7 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
 Plugin 'alvan/vim-closetag'
-Plugin 'alpertuna/vim-header'
+Plugin 'vim-header'
 
 call vundle#end()
 
@@ -35,153 +65,89 @@ let g:closetag_xhtml_filtypes = 'xhtml,jsx'
 let g:closetag_emptyTags_caseSensitive = 0
 let g:closetag_shortcut = '>'
 
+let g:header_auto_add_header = 0
+let g:header_alignment = 2
+let g:header_max_size = 10
+let g:header_field_author = "Mikael Berglund"
+let g:header_field_author_email = "mikael.berglund2@gmail.com"
+let g:header_field_copyright = "Hahmota Oy"
+
+map <F2> :AddHeader<cr>
+
 " }}}
 
-let g:header_field_author = 'Mikael Berglund'
-let g:header_field_author_email = 'mikael.berglund2@gmail.com'
-nnoremap <f1> :addHeader<cr>
+" REMAPS {{{
 
-" Basic rules			---- {{{
+" auto close brackets
+inoremap [<cr> [<cr>]<esc>O
+inoremap {<cr> {<cr>}<esc>O
 
-"" visual
-syntax on
-set foldlevelstart=0
-colorscheme molokai
-set relativenumber
-set number
-set wrap
-
-"" misc
-set encoding=utf-8
-set wildmenu
-set laststatus=2
-set ruler
-set visualbell
-set showmatch
-set hlsearch
-
-"" Tab settings
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
-set smartindent
-" }}}
-
-" Vimscript file settings ------------- {{{
-augroup filetype_vim
-	autocmd!
-	autocmd FileType vim setlocal foldmethod=marker
-	autocmd FileType vim iabbrev ftjs FileType javascript
-	autocmd FileType vim iabbrev vmap vnoremap
-	autocmd FileType vim iabbrev map nnoremap
-	autocmd FileType vim iabbrev nmap nnoremap
-	autocmd FileType vim iabbrev imap inoremap
-augroup END
-" }}}
-
-" Javascript file settings ------------ {{{
-augroup statLine
-	autocmd!
-	autocmd FileType javascript setlocal foldmethod=marker
-	autocmd FileType javascript nnoremap <buffer> <localleader>c I//<esc>
-	autocmd FileType javascript set statusline=%.20F
-	autocmd FileType javascript set statusline+=%=
-	autocmd FileType javascript set statusline+=[%4c]\ \ [%l/%L]
-	" autofill curlybrackets
-	autocmd FileType javascript inoremap {<cr> {<cr>}<esc>O
-	autocmd FileType javascript inoremap [<cr> [<cr>]<esc>O
-	" move to next / prev brackets
-	nnoremap <localleader>bn /{<cr>:nohlsearch<cr>
-	nnoremap <localleader>bp ?{<cr>:nohlsearch<cr>
-augroup END
-" }}}
-
-augroup css
-	autocmd FileType scss inoremap [<cr> [<cr>]<esc>O
-	autocmd FileType scss inoremap {<cr> {<cr>}<esc>O
-augroup END
-
-" Markdown file settings		---- {{{
-augroup mkgroup
-	autocmd!
-	autocmd FileType markdown onoremap ih :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rkvg_"<cr>
-	autocmd FileType markdown onoremap ah :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rg_vk0"<cr>
-augroup END
-" }}}
-
-" Remaps		---- {{{
-"--- Normal mode ---"
-
-" move line up or down
-nnoremap - ddkP
-nnoremap + ddp
 " make word uppercase
 nnoremap <c-u> vawUe
+inoremap <c-u> <esc>vawUea
+
 " vimrc quick edit
-nnoremap <leader>ev :split $MYVIMRC<cr>
+nnoremap <leader>ev :split $HOME/dev/vim/vimrc<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
-" gitignore quick edit
-nnoremap <leader>gi :split $HOME/.gitignore_global<cr>
-" bash alias quick edit
-nnoremap <leader>be :split $HOME/.bashrc<cr>
+
+" zsh config quick edit
+nnoremap <leader>zv :split $HOME/.zshrc<cr>
+
 " enclose word in quatations
 nnoremap <leader>" viw<esc>a"<esc>bi"<esc>lel
 nnoremap <leader>' viw<esc>a'<esc>bi'<esc>lel
 
-"--- Insert mode ---"
-
-" Remove line in
-inoremap <c-d> <esc>ddi
-" Make word uppercase
-inoremap <c-u> <esc>vawUea
+" Easier edit mode quit remap
 inoremap jk <esc>
-" Make vim comment header
-inoremap <c-h> <esc>0i"--- <esc>$a ---"
-
-"--- Visual mode ---"
 
 " Enclose selection in quotations
 vnoremap <leader>" <esc>`>a"<esc>`<i"<esc>
 vnoremap <leader>' <esc>`>a'<esc>`<i'<esc>
-" }}}
 
-" Disable arrows and esc		---- {{{
-nnoremap <left> <nop>
-nnoremap <right> <nop>
-nnoremap <up> <nop>
-nnoremap <down> <nop>
-inoremap <left> <NOP>
-inoremap <right> <NOP>
-inoremap <up> <NOP>
-inoremap <down> <NOP>
-inoremap <esc> <NOP>
-vnoremap <left> <nop>
-vnoremap <right> <nop>
-vnoremap <up> <nop>
-vnoremap <down> <nop>
-" }}}
-
-" Useful autocorrections		---- {{{
-iabbrev senior señor fartface
-iabbrev  @@ mikael.berglund2@gmail.com
-iabbrev ccopy Copyright 2019 Mikael Berglund, all rights reserved.
-iabbrev ssig -- <cr>Mikael Berglund<cr>mikael.berglund2@gmail.com
-iabbrev funtcion function
+" Remove trailing whitespaces
+nnoremap <leader>cc :%s/\s\+$//e<cr>
 
 " }}}
 
-" Remove trailing whitespace			---- {{{
-function! <SID>remove_ws()
-	let l = line(".")
-	let c = col(".")
-	%s/\s\+$//e
-	call cursor(l, c)
-endfun
+" FINDING FILES {{{
 
-augroup remove_ws
-	autocmd!
-	autocmd BufWritePre,BufRead * :call <SID>remove_ws()
-augroup END
+"search down into subfolders
+set path+=**
+
+" display all matching files when using tab complete
+set wildmenu
+
 " }}}
 
-iabbrev fmark "			---- {{{
+" TAG FINDING {{{
+
+" create the 'tags' files
+" Use ^] to jump to tag
+" Use g^] for ambigous tags
+" Use ^t to jump up the tag stack
+command! Maketags !ctags -R .
+
+" ctags enables autocomplete
+" - ^x^n for this file
+" - ^x^f for filenames
+" - ^x^] for tags
+" - ^n for anything specified by the complete option
+" - ^n and ^p go down and up in autocomplete list
+
+" }}}
+
+" FILE BROWSING {{{
+
+" Tweaks for browsing
+let g:netrw_banner=0		" disable banner
+let g:netrw_browse_split=4	" open in prior window
+let g:netrw_altv=1		" open splits to the right
+let g:netrw_liststyle=3		" tree view
+
+" }}}
+
+" SNIPPETS {{{
+
+nnoremap ,main :-1read $HOME/dev/vim/snippets/main.c<CR>f(ci(
+
+" }}}
